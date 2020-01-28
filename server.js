@@ -47,6 +47,14 @@ app.get('/chris', function (req, res) {
   addVideoToQueue(data, res)
 })
 
+app.get('/lara', function (req, res) {
+  var data = {
+    "title": "Lara",
+    "source": "videos/lara.mp4"
+  }
+  addVideoToQueue(data, res)
+})
+
 app.get('/skylaranne', function (req, res) {
   var data = {
     "title": "Skylaranne",
@@ -427,7 +435,7 @@ function addVideoToQueue(video_data, res) {
 
 function isInQueue(queue, video) {
   for(i = 0; i < queue.length; i ++) {
-    if (queue[i].title == video.title) {
+    if (queue[i].source == video.source) {
       return true
     }
   }
