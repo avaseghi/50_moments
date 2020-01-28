@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine 
+These instructions will get you a copy of the project running on your local machine 
 
 ### Installing Prerequisites
 
