@@ -1,18 +1,22 @@
 var express = require('express'),
     path = require('path'),
-    fs = require('fs'),
-    app = express();
+    sse = require('./sse'),
+    app = express(),
+    client;
 
 app.set('view engine', 'ejs');
 
-app.listen(8080, function () {
-  console.log('Example app listening on port 8080!')
-})
+app.use(sse)
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/stream', function(req, res) {
+  res.sseSetup();
+  client = res;
+})
+
 app.get('/', function(req, res) {
-    res.redirect('index.html');
+  res.redirect('index.html');
 });
 
 app.get('/chingy', function (req, res) {
@@ -20,7 +24,9 @@ app.get('/chingy', function (req, res) {
     "title": "Chingy",
     "source": "videos/chingy.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res);
 })
 
 app.get('/john', function (req, res) {
@@ -28,7 +34,9 @@ app.get('/john', function (req, res) {
     "title": "John",
     "source": "videos/john.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/bernice', function (req, res) {
@@ -36,7 +44,9 @@ app.get('/bernice', function (req, res) {
     "title": "Bernice",
     "source": "videos/bernice.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/chris', function (req, res) {
@@ -44,7 +54,9 @@ app.get('/chris', function (req, res) {
     "title": "Chris",
     "source": "videos/chris.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/lara', function (req, res) {
@@ -52,7 +64,9 @@ app.get('/lara', function (req, res) {
     "title": "Lara",
     "source": "videos/lara.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/skylaranne', function (req, res) {
@@ -60,7 +74,9 @@ app.get('/skylaranne', function (req, res) {
     "title": "Skylaranne",
     "source": "videos/skylaranne.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/victor', function (req, res) {
@@ -68,7 +84,9 @@ app.get('/victor', function (req, res) {
     "title": "Victor",
     "source": "videos/victor.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/nicole', function (req, res) {
@@ -76,7 +94,9 @@ app.get('/nicole', function (req, res) {
     "title": "Nicole",
     "source": "videos/nicole.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/kevin', function (req, res) {
@@ -84,7 +104,9 @@ app.get('/kevin', function (req, res) {
     "title": "Kevin",
     "source": "videos/kevin.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/sam', function (req, res) {
@@ -92,7 +114,9 @@ app.get('/sam', function (req, res) {
     "title": "Sam",
     "source": "videos/sam.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/guy', function (req, res) {
@@ -100,7 +124,9 @@ app.get('/guy', function (req, res) {
     "title": "Guy",
     "source": "videos/guy.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/amandah', function (req, res) {
@@ -108,7 +134,9 @@ app.get('/amandah', function (req, res) {
     "title": "Amandah",
     "source": "videos/amandah.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/jrae', function (req, res) {
@@ -116,7 +144,9 @@ app.get('/jrae', function (req, res) {
     "title": "Jrae",
     "source": "videos/jrae.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/oleg', function (req, res) {
@@ -124,7 +154,9 @@ app.get('/oleg', function (req, res) {
     "title": "Oleg",
     "source": "videos/oleg.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/james', function (req, res) {
@@ -132,7 +164,9 @@ app.get('/james', function (req, res) {
     "title": "James",
     "source": "videos/james.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/jana', function (req, res) {
@@ -140,7 +174,9 @@ app.get('/jana', function (req, res) {
     "title": "Jana",
     "source": "videos/jana.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/hassan', function (req, res) {
@@ -148,7 +184,9 @@ app.get('/hassan', function (req, res) {
     "title": "Hassan",
     "source": "videos/hassan.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/ernest', function (req, res) {
@@ -156,7 +194,9 @@ app.get('/ernest', function (req, res) {
     "title": "Ernest",
     "source": "videos/ernest.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/turtle', function (req, res) {
@@ -164,7 +204,9 @@ app.get('/turtle', function (req, res) {
     "title": "Turtle",
     "source": "videos/turtle.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/joanne', function (req, res) {
@@ -172,7 +214,9 @@ app.get('/joanne', function (req, res) {
     "title": "Joanne",
     "source": "videos/joanne.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/teresa', function (req, res) {
@@ -180,7 +224,9 @@ app.get('/teresa', function (req, res) {
     "title": "Teresa",
     "source": "videos/teresa.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/val', function (req, res) {
@@ -188,7 +234,9 @@ app.get('/val', function (req, res) {
     "title": "Val",
     "source": "videos/val.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/debra', function (req, res) {
@@ -196,7 +244,9 @@ app.get('/debra', function (req, res) {
     "title": "Debra",
     "source": "videos/debra.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/bob', function (req, res) {
@@ -204,7 +254,9 @@ app.get('/bob', function (req, res) {
     "title": "Bob",
     "source": "videos/bob.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/rene', function (req, res) {
@@ -212,7 +264,9 @@ app.get('/rene', function (req, res) {
     "title": "Rene",
     "source": "videos/rene.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/paula', function (req, res) {
@@ -220,7 +274,9 @@ app.get('/paula', function (req, res) {
     "title": "Paula",
     "source": "videos/paula.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/gage', function (req, res) {
@@ -228,7 +284,9 @@ app.get('/gage', function (req, res) {
     "title": "Gage",
     "source": "videos/gage.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/narayan', function (req, res) {
@@ -236,7 +294,9 @@ app.get('/narayan', function (req, res) {
     "title": "Narayan",
     "source": "videos/narayan.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/carlos', function (req, res) {
@@ -244,7 +304,9 @@ app.get('/carlos', function (req, res) {
     "title": "Carlos",
     "source": "videos/carlos.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/melissa', function (req, res) {
@@ -252,7 +314,9 @@ app.get('/melissa', function (req, res) {
     "title": "Melissa",
     "source": "videos/melissa.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/michael', function (req, res) {
@@ -260,7 +324,9 @@ app.get('/michael', function (req, res) {
     "title": "Michael",
     "source": "videos/michael.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/amy', function (req, res) {
@@ -268,7 +334,9 @@ app.get('/amy', function (req, res) {
     "title": "Amy",
     "source": "videos/amy.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/jay', function (req, res) {
@@ -276,7 +344,9 @@ app.get('/jay', function (req, res) {
     "title": "Jay",
     "source": "videos/jay.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/richard', function (req, res) {
@@ -284,7 +354,9 @@ app.get('/richard', function (req, res) {
     "title": "Richard",
     "source": "videos/richard.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/jose', function (req, res) {
@@ -292,7 +364,9 @@ app.get('/jose', function (req, res) {
     "title": "Jose",
     "source": "videos/jose.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/jim', function (req, res) {
@@ -300,7 +374,9 @@ app.get('/jim', function (req, res) {
     "title": "Jim",
     "source": "videos/jim.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/danny', function (req, res) {
@@ -308,7 +384,9 @@ app.get('/danny', function (req, res) {
     "title": "Danny",
     "source": "videos/danny.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/victoria', function (req, res) {
@@ -316,7 +394,9 @@ app.get('/victoria', function (req, res) {
     "title": "Victoria",
     "source": "videos/victoria.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/kaweeta', function (req, res) {
@@ -324,7 +404,9 @@ app.get('/kaweeta', function (req, res) {
     "title": "Kaweeta",
     "source": "videos/kaweeta.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/michael_2', function (req, res) {
@@ -332,7 +414,9 @@ app.get('/michael_2', function (req, res) {
     "title": "Michael",
     "source": "videos/michael_2.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/raphael', function (req, res) {
@@ -340,7 +424,9 @@ app.get('/raphael', function (req, res) {
     "title": "Raphael",
     "source": "videos/raphael.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/indie', function (req, res) {
@@ -348,7 +434,9 @@ app.get('/indie', function (req, res) {
     "title": "Indie",
     "source": "videos/indie.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/denise', function (req, res) {
@@ -356,7 +444,9 @@ app.get('/denise', function (req, res) {
     "title": "Denise",
     "source": "videos/denise.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/scott', function (req, res) {
@@ -364,7 +454,9 @@ app.get('/scott', function (req, res) {
     "title": "Scott",
     "source": "videos/scott.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/paula_2', function (req, res) {
@@ -372,7 +464,9 @@ app.get('/paula_2', function (req, res) {
     "title": "Paula",
     "source": "videos/paula_2.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/ramy', function (req, res) {
@@ -380,7 +474,9 @@ app.get('/ramy', function (req, res) {
     "title": "Ramy",
     "source": "videos/ramy.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/shawn', function (req, res) {
@@ -388,7 +484,9 @@ app.get('/shawn', function (req, res) {
     "title": "Shawn",
     "source": "videos/shawn.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/rico', function (req, res) {
@@ -396,7 +494,9 @@ app.get('/rico', function (req, res) {
     "title": "Rico",
     "source": "videos/rico.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/charise', function (req, res) {
@@ -404,7 +504,9 @@ app.get('/charise', function (req, res) {
     "title": "Charise",
     "source": "videos/charise.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
 app.get('/milo', function (req, res) {
@@ -412,36 +514,15 @@ app.get('/milo', function (req, res) {
     "title": "Milo",
     "source": "videos/milo.mp4"
   }
-  addVideoToQueue(data, res)
+
+  client.sseSend(data);
+  renderMessage(data.title, res)
 })
 
-function addVideoToQueue(video_data, res) {
-  fs.readFile("public/user_playlist.json", function (err, data) {
-    var json = JSON.parse(data)
-    if (isInQueue(json, video_data)) {
-      var message = video_data.title + " is already queued."
-      renderVerificationMessage(message, res)
-    } else {
-      json.push(video_data);
-      fs.writeFile("public/user_playlist.json", JSON.stringify(json), function (err) {
-        if (err) throw err;
-        console.log(video_data.title + ' has been added to the queue.');
-        message = "You have added " + video_data.title + " to the queue."
-        renderVerificationMessage(message, res)
-      })
-    }
-  })
+function renderMessage(name, res) {
+  res.render('template.ejs', {person: name});
 }
 
-function isInQueue(queue, video) {
-  for(i = 0; i < queue.length; i ++) {
-    if (queue[i].source == video.source) {
-      return true
-    }
-  }
-  return false
-}
-
-function renderVerificationMessage(message, res) {
-  res.render('template.ejs', {verification: message});
-}
+app.listen(8080, function () {
+  console.log('Example app listening on port 8080!')
+})
