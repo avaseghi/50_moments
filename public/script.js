@@ -1,35 +1,3 @@
-let userPlaylist = [];
-
-function init(){
-  if (!!window.EventSource) {
-      var source = new EventSource('/stream')
-
-      source.addEventListener('message', function(e) {
-        vid = JSON.parse(e.data)
-        userPlaylist.push(vid)
-        console.log(vid.title + " has been added to the queue.")
-        console.log(userPlaylist);
-
-      }, false)
-
-      source.addEventListener('open', function(e) {
-        console.log("Connected to stream.")
-      }, false)
-
-      source.addEventListener('error', function(e) {
-        if (e.target.readyState == EventSource.CLOSED) {
-          console.log("Disconnected from stream.")
-        }
-        else if (e.target.readyState == EventSource.CONNECTING) {
-          console.log("Connecting to stream...")
-        }
-      }, false)
-    } else {
-      console.log("Your browser doesn't support SSE")
-    }
-
-  startPlaylist();
-}
 
 // default playlist - array of objects
 let defaultPlaylist = [
@@ -41,38 +9,36 @@ let defaultPlaylist = [
     src: 'https://vjs.zencdn.net/v/oceans.mp4',
     type: 'video/mp4'
   }
-];
+]
 
-// start the playlist
-function startPlaylist() {
-  // if user list is empty
-  if (userPlaylist.length == 0) {
-    console.log('The user playlist is empty! Playing the default playlist!');
-    // play default playlist
-    playDefaultPlaylist();
-  } else {
-    console.log('Playing user playlist');
-    // play the user playlist
-    playUserPlaylist();
-  }
+function getNextVid() {
+  $.ajax({
+    url: "/queue",
+    success: function(response) {
+      console.log(response);
+      if (response) {
+        playUserSelectedVid(response);
+      } else {
+        playDefaultVid();
+      }
+    }
+  });
 }
 
 // play the user playlist
-function playUserPlaylist() {
+function playUserSelectedVid(video) {
   // grab the video element id
   let vid = document.getElementById("vid");
-  vid.src = userPlaylist[0].source;
+  vid.src = video.source;
 
   vid.onended = function() {
-      // delete the first video in the playlist/queue
-      userPlaylist.shift();
-      startPlaylist();
+    getNextVid();
   };
 }
 
 index = 0
 // play default playlist
-function playDefaultPlaylist() {
+function playDefaultVid() {
   // grab the video element id
   let vid = document.getElementById("vid");
   vid.src = defaultPlaylist[index].src;
@@ -83,9 +49,10 @@ function playDefaultPlaylist() {
     } else {
       index = 0;
     }
+
     // start playlist function again (to check if there's anything in the user playlist)
-    startPlaylist();
+    getNextVid();
   };
 }
 
-init();
+getNextVid();
