@@ -489,13 +489,12 @@ function addVideoToQueue(video_data, res) {
     }
 
   } else {
-
     vidQueue.push(video_data);
 
     var message = "You have added " + video_data.title + " to the queue."
+    console.log(message);
   }
 
-  console.log(message);
   renderVerificationMessage(message, res);
 }
 
