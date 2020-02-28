@@ -1,191 +1,247 @@
 var express = require('express'),
     path = require('path'),
+    fs = require('fs'),
     app = express(),
     currentVid,
-    vidQueue = [];
+    vidQueue = [],
+    default_playlist = require('./default_playlist'),
+    default_index = 0;
+
 
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/queue', function(req, res) {
-  currentVid = vidQueue[0];
   if(vidQueue.length > 0) {
+    currentVid = vidQueue[0];
     vidQueue.shift();
+  } else {
+    currentVid = default_playlist[default_index];
+    if (default_index < default_playlist.length - 1) {
+      default_index ++;
+    } else {
+      default_index = 0;
+    }
   }
   res.send(currentVid);
+});
+
+app.get('/video', function(req, res) {
+  const path_1 = 'public/sintel.mp4'
+  const path_2 = 'public/oceans.mp4'
+  // const stat = fs.statSync(path)
+  // const fileSize = stat.size
+  // const range = req.headers.range
+  // if (range) {
+  //   const parts = range.replace(/bytes=/, "").split("-")
+  //   const start = parseInt(parts[0], 10)
+  //   const end = parts[1]
+  //     ? parseInt(parts[1], 10)
+  //     : fileSize-1
+  //   const chunksize = (end - start) + 1
+  //   const file = fs.createReadStream(path, {start, end})
+  //   const head = {
+  //     'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+  //     'Accept-Ranges': 'bytes',
+  //     'Content-Length': chunksize,
+  //     'Content-Type': 'video/mp4',
+  //   }
+  //   res.writeHead(206, head);
+  //   file.pipe(res);
+  // } else {
+    const head = {
+      // 'Content-Length': fileSize,
+      'Content-Type': 'video/mp4',
+    }
+    res.writeHead(200, head)
+    var stream = fs.createReadStream(path_1)
+    stream.pipe(res)
+    stream.on('close', function(){
+      fs.createReadStream(path_2).pipe(res)
+    });
+  // }
 });
 
 app.get('/', function(req, res) {
   res.redirect('index.html');
 });
 
-app.get('/chingy', function (req, res) {
+app.get('/amandah', function (req, res) {
   var data = {
-    "title": "Chingy",
-    "source": "videos/chingy.mp4"
+    "title": "Amandah",
+    "index": 0
   }
 
   addVideoToQueue(data, res);
-})
+});
 
-app.get('/john', function (req, res) {
+app.get('/amy', function (req, res) {
   var data = {
-    "title": "John",
-    "source": "videos/john.mp4"
+    "title": "Amy",
+    "index": 1
   }
 
   addVideoToQueue(data, res);
-})
+});
 
 app.get('/bernice', function (req, res) {
   var data = {
     "title": "Bernice",
-    "source": "videos/bernice.mp4"
+    "index": 2
   }
 
   addVideoToQueue(data, res);
-})
+});
+
+app.get('/bob', function (req, res) {
+  var data = {
+    "title": "Bob",
+    "index": 3
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/carlos', function (req, res) {
+  var data = {
+    "title": "Carlos",
+    "index": 4
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/charise', function (req, res) {
+  var data = {
+    "title": "Charise",
+    "index": 5
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/chingy', function (req, res) {
+  var data = {
+    "title": "Chingy",
+    "index": 6
+  }
+
+  addVideoToQueue(data, res);
+});
 
 app.get('/chris', function (req, res) {
   var data = {
     "title": "Chris",
-    "source": "videos/chris.mp4"
+    "index": 7
   }
 
   addVideoToQueue(data, res);
-})
+});
 
-app.get('/lara', function (req, res) {
+app.get('/danny', function (req, res) {
   var data = {
-    "title": "Lara",
-    "source": "videos/lara.mp4"
+    "title": "Danny",
+    "index": 8
   }
 
   addVideoToQueue(data, res);
-})
+});
 
-app.get('/skylaranne', function (req, res) {
+app.get('/debra', function (req, res) {
   var data = {
-    "title": "Skylaranne",
-    "source": "videos/skylaranne.mp4"
+    "title": "Debra",
+    "index": 9
   }
 
   addVideoToQueue(data, res);
-})
+});
 
-app.get('/victor', function (req, res) {
+app.get('/denise', function (req, res) {
   var data = {
-    "title": "Victor",
-    "source": "videos/victor.mp4"
+    "title": "Denise",
+    "index": 10
   }
 
   addVideoToQueue(data, res);
-})
-
-app.get('/nicole', function (req, res) {
-  var data = {
-    "title": "Nicole",
-    "source": "videos/nicole.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/kevin', function (req, res) {
-  var data = {
-    "title": "Kevin",
-    "source": "videos/kevin.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/sam', function (req, res) {
-  var data = {
-    "title": "Sam",
-    "source": "videos/sam.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/guy', function (req, res) {
-  var data = {
-    "title": "Guy",
-    "source": "videos/guy.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/amandah', function (req, res) {
-  var data = {
-    "title": "Amandah",
-    "source": "videos/amandah.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/jrae', function (req, res) {
-  var data = {
-    "title": "Jrae",
-    "source": "videos/jrae.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/oleg', function (req, res) {
-  var data = {
-    "title": "Oleg",
-    "source": "videos/oleg.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/james', function (req, res) {
-  var data = {
-    "title": "James",
-    "source": "videos/james.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/jana', function (req, res) {
-  var data = {
-    "title": "Jana",
-    "source": "videos/jana.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/hassan', function (req, res) {
-  var data = {
-    "title": "Hassan",
-    "source": "videos/hassan.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
+});
 
 app.get('/ernest', function (req, res) {
   var data = {
     "title": "Ernest",
-    "source": "videos/ernest.mp4"
+    "index": 11
   }
 
   addVideoToQueue(data, res);
-})
+});
 
-app.get('/turtle', function (req, res) {
+app.get('/gage', function (req, res) {
   var data = {
-    "title": "Turtle",
-    "source": "videos/turtle.mp4"
+    "title": "Gage",
+    "index": 12
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/guy', function (req, res) {
+  var data = {
+    "title": "Guy",
+    "index": 13
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/hassan', function (req, res) {
+  var data = {
+    "title": "Hassan",
+    "index": 14
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/indie', function (req, res) {
+  var data = {
+    "title": "Indie",
+    "index": 15
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/james', function (req, res) {
+  var data = {
+    "title": "James",
+    "index": 16
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/jana', function (req, res) {
+  var data = {
+    "title": "Jana",
+    "index": 17
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/jay', function (req, res) {
+  var data = {
+    "title": "Jay",
+    "index": 18
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/jim', function (req, res) {
+  var data = {
+    "title": "Jim",
+    "index": 19
   }
 
   addVideoToQueue(data, res);
@@ -194,286 +250,277 @@ app.get('/turtle', function (req, res) {
 app.get('/joanne', function (req, res) {
   var data = {
     "title": "Joanne",
-    "source": "videos/joanne.mp4"
+    "index": 20
   }
 
   addVideoToQueue(data, res);
-})
+});
 
-app.get('/teresa', function (req, res) {
+app.get('/john', function (req, res) {
   var data = {
-    "title": "Teresa",
-    "source": "videos/teresa.mp4"
+    "title": "John",
+    "index": 21
   }
 
   addVideoToQueue(data, res);
-})
-
-app.get('/val', function (req, res) {
-  var data = {
-    "title": "Val",
-    "source": "videos/val.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/debra', function (req, res) {
-  var data = {
-    "title": "Debra",
-    "source": "videos/debra.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/bob', function (req, res) {
-  var data = {
-    "title": "Bob",
-    "source": "videos/bob.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/rene', function (req, res) {
-  var data = {
-    "title": "Rene",
-    "source": "videos/rene.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/paula', function (req, res) {
-  var data = {
-    "title": "Paula",
-    "source": "videos/paula.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/gage', function (req, res) {
-  var data = {
-    "title": "Gage",
-    "source": "videos/gage.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/narayan', function (req, res) {
-  var data = {
-    "title": "Narayan",
-    "source": "videos/narayan.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/carlos', function (req, res) {
-  var data = {
-    "title": "Carlos",
-    "source": "videos/carlos.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/melissa', function (req, res) {
-  var data = {
-    "title": "Melissa",
-    "source": "videos/melissa.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/michael', function (req, res) {
-  var data = {
-    "title": "Michael",
-    "source": "videos/michael.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/amy', function (req, res) {
-  var data = {
-    "title": "Amy",
-    "source": "videos/amy.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/jay', function (req, res) {
-  var data = {
-    "title": "Jay",
-    "source": "videos/jay.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/richard', function (req, res) {
-  var data = {
-    "title": "Richard",
-    "source": "videos/richard.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
+});
 
 app.get('/jose', function (req, res) {
   var data = {
     "title": "Jose",
-    "source": "videos/jose.mp4"
+    "index": 22
   }
 
   addVideoToQueue(data, res);
 })
 
-app.get('/jim', function (req, res) {
+app.get('/jrae', function (req, res) {
   var data = {
-    "title": "Jim",
-    "source": "videos/jim.mp4"
+    "title": "Jrae",
+    "index": 23
   }
 
   addVideoToQueue(data, res);
-})
-
-app.get('/danny', function (req, res) {
-  var data = {
-    "title": "Danny",
-    "source": "videos/danny.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/victoria', function (req, res) {
-  var data = {
-    "title": "Victoria",
-    "source": "videos/victoria.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
+});
 
 app.get('/kaweeta', function (req, res) {
   var data = {
     "title": "Kaweeta",
-    "source": "videos/kaweeta.mp4"
+    "index": 24
   }
 
   addVideoToQueue(data, res);
-})
+});
+
+app.get('/kevin', function (req, res) {
+  var data = {
+    "title": "Kevin",
+    "index": 25
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/lara', function (req, res) {
+  var data = {
+    "title": "Lara",
+    "index": 26
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/melissa', function (req, res) {
+  var data = {
+    "title": "Melissa",
+    "index": 27
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/michael', function (req, res) {
+  var data = {
+    "title": "Michael",
+    "index": 28
+  }
+
+  addVideoToQueue(data, res);
+});
 
 app.get('/michael_2', function (req, res) {
   var data = {
     "title": "Michael",
-    "source": "videos/michael_2.mp4"
+    "index": 29
   }
 
   addVideoToQueue(data, res);
-})
-
-app.get('/raphael', function (req, res) {
-  var data = {
-    "title": "Raphael",
-    "source": "videos/raphael.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/indie', function (req, res) {
-  var data = {
-    "title": "Indie",
-    "source": "videos/indie.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/denise', function (req, res) {
-  var data = {
-    "title": "Denise",
-    "source": "videos/denise.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/scott', function (req, res) {
-  var data = {
-    "title": "Scott",
-    "source": "videos/scott.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/paula_2', function (req, res) {
-  var data = {
-    "title": "Paula",
-    "source": "videos/paula_2.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/ramy', function (req, res) {
-  var data = {
-    "title": "Ramy",
-    "source": "videos/ramy.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/shawn', function (req, res) {
-  var data = {
-    "title": "Shawn",
-    "source": "videos/shawn.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/rico', function (req, res) {
-  var data = {
-    "title": "Rico",
-    "source": "videos/rico.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
-
-app.get('/charise', function (req, res) {
-  var data = {
-    "title": "Charise",
-    "source": "videos/charise.mp4"
-  }
-
-  addVideoToQueue(data, res);
-})
+});
 
 app.get('/milo', function (req, res) {
   var data = {
     "title": "Milo",
-    "source": "videos/milo.mp4"
+    "index": 30
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/narayan', function (req, res) {
+  var data = {
+    "title": "Narayan",
+    "index": 31
   }
 
   addVideoToQueue(data, res);
 })
 
+app.get('/nicole', function (req, res) {
+  var data = {
+    "title": "Nicole",
+    "index": 32
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/oleg', function (req, res) {
+  var data = {
+    "title": "Oleg",
+    "index": 33
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/paula', function (req, res) {
+  var data = {
+    "title": "Paula",
+    "index": 34
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/paula_2', function (req, res) {
+  var data = {
+    "title": "Paula",
+    "index": 35
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/ramy', function (req, res) {
+  var data = {
+    "title": "Ramy",
+    "index": 36
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/raphael', function (req, res) {
+  var data = {
+    "title": "Raphael",
+    "index": 37
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/rene', function (req, res) {
+  var data = {
+    "title": "Rene",
+    "index": 38
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/richard', function (req, res) {
+  var data = {
+    "title": "Richard",
+    "index": 39
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/rico', function (req, res) {
+  var data = {
+    "title": "Rico",
+    "index": 40
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/sam', function (req, res) {
+  var data = {
+    "title": "Sam",
+    "index": 41
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/scott', function (req, res) {
+  var data = {
+    "title": "Scott",
+    "index": 42
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/shawn', function (req, res) {
+  var data = {
+    "title": "Shawn",
+    "index": 43
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/skylaranne', function (req, res) {
+  var data = {
+    "title": "Skylaranne",
+    "index": 44
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/teresa', function (req, res) {
+  var data = {
+    "title": "Teresa",
+    "index": 45
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/turtle', function (req, res) {
+  var data = {
+    "title": "Turtle",
+    "index": 46
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/val', function (req, res) {
+  var data = {
+    "title": "Val",
+    "index": 47
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/victor', function (req, res) {
+  var data = {
+    "title": "Victor",
+    "index": 48
+  }
+
+  addVideoToQueue(data, res);
+});
+
+app.get('/victoria', function (req, res) {
+  var data = {
+    "title": "Victoria",
+    "index": 49
+  }
+
+  addVideoToQueue(data, res);
+});
+
 function addVideoToQueue(video_data, res) {
   var vidInQueue = checkQueue(video_data);
 
-  if (currentVid && currentVid.source == video_data.source) {
+  if (currentVid && currentVid.index == video_data.index) {
 
       var message = video_data.title + " is currently playing."
 
@@ -489,6 +536,7 @@ function addVideoToQueue(video_data, res) {
     }
 
   } else {
+
     vidQueue.push(video_data);
 
     var message = "You have added " + video_data.title + " to the queue."
@@ -500,7 +548,7 @@ function addVideoToQueue(video_data, res) {
 
 function checkQueue(video) {
   for(i = 0; i < vidQueue.length; i ++) {
-    if (vidQueue[i].source == video.source) {
+    if (vidQueue[i].index == video.index) {
       return i + 1
     }
   }
@@ -511,6 +559,6 @@ function renderVerificationMessage(message, res) {
   res.render('template.ejs', {verification: message});
 }
 
-app.listen(8080, function () {
-  console.log('Example app listening on port 8080!')
+app.listen(8000, function () {
+  console.log('Example app listening on port 8000!')
 })
