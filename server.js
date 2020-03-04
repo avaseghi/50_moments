@@ -75,6 +75,6 @@ function renderVerificationMessage(message, res) {
   res.render('template.ejs', {verification: message});
 }
 
-app.listen(8000, function () {
+app.listen(80, function () {
   console.log('Server running!')
 })
